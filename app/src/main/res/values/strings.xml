@@ -1,0 +1,10 @@
+<resources>
+    <string name="app_name">P2PWiFiManagerRoot</string>
+    <string name="disabled_permissions_denied">Disabled (Permissions Denied)</string>
+    <string name="service_starting">Service starting</string>
+    <string name="authenticator_app_service">Authenticator App Service</string>
+    <string name="enable_authenticator">Enable Authenticator</string>
+    <string name="current_status">Current Status:</string>
+    <string name="service_inactive">Service Inactive</string>
+    <string name="enable_ssh_server_text">When enabled, this service broadcasts its availability on the local network and listens for secure commands to start the SSH server.</string>
+</resources>
