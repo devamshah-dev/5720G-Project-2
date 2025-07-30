@@ -14,20 +14,20 @@ data class BroadcastMessage(
     val gpsLongitude: Double? = null, // Current GPS Longitude
     val faceMatchResult: String? = null // Result of on-device face match (e.g., "OWNER_MATCH", "UNRECOGNIZED_FACE", "NOT_TRIGGERED")
 )
-
+@Serializable
 @kotlinx.serialization.InternalSerializationApi
 data class AuthRequest(
     val cmd: String,                // "start_ssh"
     val pcIdHash: String,           // SHA256 of Host PC's SSH public key
     val authCode: String            // Pre-shared secret code
 )
-
+@Serializable
 @kotlinx.serialization.InternalSerializationApi
 data class AuthResponse(
     val status: String,             // "OK", "FAILED"
     val message: String             // message
 )
-
+@Serializable
 @kotlinx.serialization.InternalSerializationApi
 data class P2pIpInfo( // For the JSON file output (optional, as main IP discovery is via broadcast now)
     val ipv4: String?,

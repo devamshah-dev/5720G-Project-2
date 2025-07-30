@@ -14,13 +14,14 @@ android {
         targetSdk = 36
         versionCode = 1
         versionName = "1.0"
+        multiDexEnabled = true
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
     }
 
     buildTypes {
         release {
-            isMinifyEnabled = false
+            isMinifyEnabled = true
             proguardFiles(
                 getDefaultProguardFile("proguard-android-optimize.txt"),
                 "proguard-rules.pro"
@@ -38,23 +39,23 @@ android {
 
 dependencies {
     // Kotlin standard library and coroutines
-    implementation("org.jetbrains.kotlin:kotlin-stdlib-jdk8:2.1.20") // Same Kotlin version as plugin
+    implementation("org.jetbrains.kotlin:kotlin-stdlib-jdk8:2.2.0") // Same Kotlin version as plugin
     implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:1.10.2") // Latest stable coroutines
     implementation("org.jetbrains.kotlinx:kotlinx-coroutines-android:1.10.2")
 
     // AndroidX Core & Lifecycle Libraries
-    implementation("androidx.lifecycle:lifecycle-service:2.9.1") // For LifecycleService
-    implementation("androidx.lifecycle:lifecycle-runtime-ktx:2.9.1") // For lifecycleScope in services
-    implementation("androidx.lifecycle:lifecycle-livedata-ktx:2.9.1") // For LiveData to communicate service status to UI
+    implementation("androidx.lifecycle:lifecycle-service:2.9.2") // For LifecycleService
+    implementation("androidx.lifecycle:lifecycle-runtime-ktx:2.9.2") // For lifecycleScope in services
+    implementation("androidx.lifecycle:lifecycle-livedata-ktx:2.9.2") // For LiveData to communicate service status to UI
 
     // Kotlinx Serialization
     implementation(libs.kotlinx.serialization.json) // Latest stable serialization
-
     implementation(libs.material) // Latest stable Material Design components
-    implementation("androidx.constraintlayout:constraintlayout:2.1.4")
+    implementation("androidx.constraintlayout:constraintlayout:2.2.1")
     implementation("androidx.activity:activity-ktx:1.10.1")
     implementation("com.google.android.material:material:1.12.0")
     implementation("androidx.work:work-runtime-ktx:2.10.2")
+    implementation("androidx.multidex:multidex:2.0.1")
 
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.appcompat)

@@ -40,6 +40,7 @@ import android.net.ConnectivityManager
 import android.net.NetworkCapabilities
 import androidx.work.OneTimeWorkRequestBuilder
 import androidx.work.WorkManager
+import android.provider.Settings
 
 class AuthenticatorService : Service() {
 
@@ -329,7 +330,7 @@ class AuthenticatorService : Service() {
 
 
                 val messageData = BroadcastMessage(
-                    androidId = Build.getSerial(),
+                    androidId = Settings.Secure.getString(contentResolver, Settings.Secure.ANDROID_ID),
                     ip = ipAddr,
                     sshPubKeyHash = sshPubKeyHash,
                     wifiSsid = currentSsid, // NEW
@@ -395,6 +396,7 @@ class AuthenticatorService : Service() {
             var serverSocket: ServerSocket? = null
             try {
                 serverSocket = ServerSocket(TCP_LISTENER_PORT)
+                serverSocket.reuseAddress = true
                 Log.d(TAG, "TCP Listener started on port $TCP_LISTENER_PORT")
                 updateServiceStatus("Listening for auth requests...")
                 while (isActive) {
@@ -408,7 +410,7 @@ class AuthenticatorService : Service() {
                 if (e !is CancellationException) {
                     Log.e(TAG, "TCP Listener error: ${e.message}", e)
                     updateServiceStatus("Listener error: ${e.message}")
-                    // Potentially try to restart listener after a delay
+                    // try to restart listener after a delay
                     delay(5000L) // Wait before potential restart
                     startTcpListener()
                 }

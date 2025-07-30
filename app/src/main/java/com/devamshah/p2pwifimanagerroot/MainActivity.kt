@@ -153,13 +153,25 @@ class MainActivity : AppCompatActivity() {
     }
     private fun startAuthenticatorService() {
         Log.d(TAG, "Attempting to start AuthenticatorService from MainActivity.")
-        val serviceIntent = Intent(this, AuthenticatorService::class.java)
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-            startForegroundService(serviceIntent)
+        val command = "am start-foreground-service -n ${packageName}/${AuthenticatorService::class.java.name}"
+        val (success, stdout, stderr) = RootCommandExecutor.execute(command, timeoutMs = 5000)
+
+        if (success) {
+            Log.d(TAG, "AuthenticatorService force-started via root command.")
+            statusTextView.text = getString(R.string.service_starting_via_root)
+            Toast.makeText(this, "Sentry Service Activated (via root).", Toast.LENGTH_SHORT).show()
         } else {
-            startService(serviceIntent)
+            Log.e(TAG, "Failed to force-start AuthenticatorService via root: $stderr")
+            // Fallback to normal start, might still fail on A15, but try anyway
+            val serviceIntent = Intent(this, AuthenticatorService::class.java)
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+                startForegroundService(serviceIntent)
+            } else {
+                startService(serviceIntent)
+            }
+            statusTextView.text = getString(R.string.service_starting)
+            Toast.makeText(this, "Sentry Service Activated (fallback).", Toast.LENGTH_SHORT).show()
         }
-        statusTextView.text = getString(R.string.service_starting)
     }
     private fun stopAuthenticatorService() {
         Log.d(TAG, "Attempting to stop AuthenticatorService from MainActivity.")

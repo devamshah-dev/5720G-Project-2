@@ -26,6 +26,7 @@
     <uses-feature android:name="android.hardware.camera" android:required="false" />
 
     <application
+        android:name="androidx.multidex.MultiDexApplication"
         android:allowBackup="true"
         android:dataExtractionRules="@xml/data_extraction_rules"
         android:fullBackupContent="@xml/backup_rules"
@@ -74,15 +75,6 @@
                 <action android:name="android.app.action.PASSWORD_SUCCEEDED" />
             </intent-filter>
         </receiver>
-        <provider
-            android:name="androidx.work.impl.WorkManagerInitializer"
-            android:authorities="${applicationId}.workmanager-init"
-            android:exported="false"
-            android:enabled="true" /> <!-- Set enabled to false to use custom initialization -->
-        <meta-data
-            android:name="androidx.work.WorkManagerInitializer"
-            android:value="androidx.work.WorkManagerInitializer" />
-
     </application>
 
 </manifest>

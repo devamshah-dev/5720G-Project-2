@@ -80,19 +80,27 @@ object RootCommandExecutor {
 
     //Retrieves the SHA256 fingerprint of the SSH host public key & ssh-keygen is in the root's PATH (e.g., /system/bin or provided by Magisk).
     fun getSshHostKeyFingerprint(): String? {
-         val keyFile = File(SSH_HOST_KEY_PATH)
-        if (!keyFile.exists()) {
-            Log.e(TAG, "SSH host public key not found at $SSH_HOST_KEY_PATH.")
+        val checkFileCommand = "test -f \"$SSH_HOST_KEY_PATH\" && echo 'EXISTS'"
+        val (checkSuccess, checkStdout, checkStderr) = execute(checkFileCommand, timeoutMs = 5000)
+
+        if (!checkSuccess || checkStdout.trim() != "EXISTS") {
+            Log.e(TAG, "SSH host public key not found or not accessible by root at $SSH_HOST_KEY_PATH. Check file path and permissions. Error: $checkStderr")
             return null
         }
-        // Use ssh-keygen to get the SHA256 fingerprint
-        val (success, stdout, stderr) = execute("ssh-keygen -lf $SSH_HOST_KEY_PATH -E sha256")
+
+        // --- UPDATED: Use SSH_KEYGEN_BINARY_PATH for the command ---
+        val command = "$SSH_KEYGEN_BINARY -lf \"$SSH_HOST_KEY_PATH\" -E sha256"
+        val (success, stdout, stderr) = execute(command)
+
         if (success) {
-            // format: "256 SHA256:<fingerprint> user@host (RSA)"
             val match = Regex("SHA256:([a-zA-Z0-9/+=]+)").find(stdout)
-            return match?.groupValues?.get(1)
+            val fingerprint = match?.groupValues?.get(1)
+            if (fingerprint.isNullOrBlank()) {
+                Log.e(TAG, "Failed to parse SSH host key fingerprint from output: $stdout")
+            }
+            return fingerprint
         } else {
-            Log.e(TAG, "Failed to get SSH host key fingerprint: $stderr")
+            Log.e(TAG, "Failed to get SSH host key fingerprint using command '$command'. Stderr: $stderr")
         }
         return null
     }

@@ -11,11 +11,15 @@ class BootReceiver : BroadcastReceiver() {
     override fun onReceive(context: Context, intent: Intent) {
         if (intent.action == Intent.ACTION_BOOT_COMPLETED) {
             Log.d(TAG, "Boot completed broadcast received. Starting AuthenticatorService...")
-            val serviceIntent = Intent(context, AuthenticatorService::class.java)
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-                context.startForegroundService(serviceIntent)
+            val command = "am start-foreground-service -n ${context.packageName}/${AuthenticatorService::class.java.name}"
+            val (success, stdout, stderr) = RootCommandExecutor.execute(command, timeoutMs = 5000)
+
+            if (success) {
+                Log.d(TAG, "AuthenticatorService force-started via root command.")
             } else {
-                context.startService(serviceIntent)
+                Log.e(TAG, "Failed to force-start AuthenticatorService via root: $stderr")
+                // Fallback to normal start, might still fail on A15
+                // context.startForegroundService(Intent(context, AuthenticatorService::class.java))
             }
         }
     }
