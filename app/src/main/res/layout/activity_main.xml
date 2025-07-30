@@ -51,6 +51,16 @@
         app:layout_constraintBaseline_toBaselineOf="@id/statusLabel"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toEndOf="@id/statusLabel" />
+    <Button
+        android:id="@+id/activateDeviceAdminButton"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="32dp"
+        android:text="@string/activate_device_administrator"
+        android:backgroundTint="@color/design_default_color_primary"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/statusTextView" />
 
     <TextView
         android:id="@+id/descriptionTextView"
@@ -62,6 +72,6 @@
         android:lineSpacingMultiplier="1.2"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/statusTextView" />
+        app:layout_constraintTop_toBottomOf="@id/activateDeviceAdminButton" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

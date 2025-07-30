@@ -4,8 +4,10 @@ import androidx.work.Worker
 import androidx.work.WorkerParameters
 import java.io.File
 import java.io.IOException
+import android.util.Log
 
 class PhotoCaptureWorker(context: Context, params: WorkerParameters) : Worker(context, params) {
+    private val TAG = "PhotoWorker"
     override fun doWork(): Result {
         try {
             // Define where to save the picture. Use the app's internal storage.
@@ -20,14 +22,16 @@ class PhotoCaptureWorker(context: Context, params: WorkerParameters) : Worker(co
             // It specifies the camera to use (0 is usually the back camera) and the output file path.
             val command = "su -c termux-camera-photo -c 0 ${outputFile.absolutePath}"
 
-            val process = Runtime.getRuntime().exec(command)
-            val exitCode = process.waitFor()
+            Log.d(TAG, "Executing photo capture command: $command")
+            val (success, stdout, stderr) = RootCommandExecutor.execute(command)
 
-            return if (exitCode == 0) {
+            return if (success) {
                 println("Photo captured successfully: ${outputFile.absolutePath}")
+                // Optionally, broadcast an intent here to update AuthenticatorService
+                // with a "photo_taken" status or even process the photo for face match.
                 Result.success()
             } else {
-                println("Failed to capture photo. Exit code: $exitCode")
+                println("Failed to capture photo. Exit code: $stderr")
                 Result.failure()
             }
 

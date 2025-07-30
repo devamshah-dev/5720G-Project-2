@@ -7,4 +7,8 @@
     <string name="current_status">Current Status:</string>
     <string name="service_inactive">Service Inactive</string>
     <string name="enable_ssh_server_text">When enabled, this service broadcasts its availability on the local network and listens for secure commands to start the SSH server.</string>
+    <string name="activate_device_administrator">ACTIVATE Device Administrator</string>
+    <string name="disabled_device_admin_needed">Disabled (Device Admin Needed)</string>
+    <string name="service_stopped_by_user">Service stopped by user.</string>
+    <string name="device_administrator_active">Device Administrator ACTIVE</string>
 </resources>

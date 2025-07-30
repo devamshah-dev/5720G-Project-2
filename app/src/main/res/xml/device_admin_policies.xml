@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<device-admin xmlns:android="http://schemas.android.com/apk/res/android">
+    <uses-policies>
+        <limit-password /> <!-- setting password policies -->
+        <reset-password /> <!-- resetting/clearing passwords -->
+        <force-lock />     <!-- locking the device -->
+        <!-- <wipe-data /> --> <!-- for factory reset -->
+    </uses-policies>
+</device-admin>
